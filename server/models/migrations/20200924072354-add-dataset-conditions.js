@@ -2,25 +2,23 @@ const Sequelize = require("sequelize");
 
 module.exports = {
   up: async (queryInterface) => {
-    return queryInterface.sequelize.transaction((t) => {
-      return Promise.all([
-        queryInterface.addColumn("Dataset", "conditions", {
-          type: Sequelize.TEXT,
-          set(val) {
-            return this.setDataValue("conditions", JSON.stringify(val));
-          },
-          get() {
-            try {
-              return JSON.parse(this.getDataValue("conditions"));
-            } catch (e) {
-              return this.getDataValue("conditions");
-            }
+    return queryInterface.sequelize.transaction(async (t) => {
+      await queryInterface.addColumn("Dataset", "conditions", {
+        type: Sequelize.TEXT,
+        set(val) {
+          return this.setDataValue("conditions", JSON.stringify(val));
+        },
+        get() {
+          try {
+            return JSON.parse(this.getDataValue("conditions"));
+          } catch (e) {
+            return this.getDataValue("conditions");
           }
-        }, { transaction: t }),
-        queryInterface.removeColumn("Dataset", "xAxisType", { transaction: t }),
-        queryInterface.removeColumn("Dataset", "yAxisType", { transaction: t }),
-      ])
-        .catch(() => Promise.resolve("done"));
+        }
+      }, { transaction: t });
+
+      await queryInterface.removeColumn("Dataset", "xAxisType", { transaction: t });
+      await queryInterface.removeColumn("Dataset", "yAxisType", { transaction: t });
     });
   },
 

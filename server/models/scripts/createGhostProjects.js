@@ -14,7 +14,7 @@ module.exports.up = async (queryInterface) => {
   const dialect = queryInterface.sequelize.getDialect();
 
   let teams;
-  if (dialect === "mysql") {
+  if (dialect === "mysql" || dialect === "sqlite") {
     teams = await queryInterface.sequelize.query(
       "SELECT id FROM Team;",
     );
@@ -48,7 +48,7 @@ module.exports.up = async (queryInterface) => {
 module.exports.down = async (queryInterface) => {
   const dialect = queryInterface.sequelize.getDialect();
 
-  if (dialect === "mysql") {
+  if (dialect === "mysql" || dialect === "sqlite") {
     await queryInterface.sequelize.query(
       "DELETE FROM Project WHERE ghost = true;",
     );

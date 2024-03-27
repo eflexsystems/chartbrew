@@ -15,7 +15,7 @@ module.exports = {
     });
 
     let savedQueries;
-    if (dialect === "mysql") {
+    if (dialect === "mysql" || dialect === "sqlite") {
       savedQueries = await queryInterface.sequelize.query(`
         SELECT SavedQuery.*, Project.team_id FROM SavedQuery
         JOIN Project on SavedQuery.project_id = Project.id;

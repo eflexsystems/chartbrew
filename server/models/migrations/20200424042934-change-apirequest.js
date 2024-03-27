@@ -9,7 +9,7 @@ module.exports = {
     return queryInterface.renameTable("ApiRequest", "DataRequest")
       .then(() => {
         let rawQuery;
-        if (dialect === "mysql") {
+        if (dialect === "mysql" || dialect === "sqlite") {
           rawQuery = `
             ALTER TABLE DataRequest MODIFY chart_id INT NULL
           `;

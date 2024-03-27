@@ -9,7 +9,7 @@ module.exports = {
       type: Sequelize.STRING,
     });
 
-    if (dialect === "mysql") {
+    if (dialect === "mysql" || dialect === "sqlite") {
       await queryInterface.sequelize.query(`
         UPDATE TeamRole SET role_backup = role
       `);
@@ -25,7 +25,7 @@ module.exports = {
   async down(queryInterface) {
     const dialect = queryInterface.sequelize.getDialect();
 
-    if (dialect === "mysql") {
+    if (dialect === "mysql" || dialect === "sqlite") {
       await queryInterface.sequelize.query(`
         UPDATE TeamRole SET role = role_backup
       `);

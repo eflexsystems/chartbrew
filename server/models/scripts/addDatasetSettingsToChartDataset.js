@@ -5,7 +5,7 @@ module.exports.up = async (queryInterface) => {
   const dialect = queryInterface.sequelize.getDialect();
 
   let datasets;
-  if (dialect === "mysql") {
+  if (dialect === "mysql" || dialect === "sqlite") {
     [datasets] = await queryInterface.sequelize.query(`
       SELECT d.*, c.id as c_id
       FROM Dataset AS d

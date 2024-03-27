@@ -14,6 +14,7 @@ const options = {
   port: config.port,
   dialect: config.dialect,
   logging: false,
+  storage: config.storage,
   pool: {
     max: 5,
     min: 0,

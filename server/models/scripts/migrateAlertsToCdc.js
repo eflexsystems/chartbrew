@@ -12,7 +12,7 @@ module.exports.up = async (queryInterface) => {
   const dialect = queryInterface.sequelize.getDialect();
   let cdcs;
 
-  if (dialect === "mysql") {
+  if (dialect === "mysql" || dialect === "sqlite") {
     cdcs = await queryInterface.sequelize.query(
       "SELECT id, dataset_id FROM ChartDatasetConfig",
       { type: queryInterface.sequelize.QueryTypes.SELECT }
@@ -26,7 +26,7 @@ module.exports.up = async (queryInterface) => {
 
   let alerts = [];
   try {
-    if (dialect === "mysql") {
+    if (dialect === "mysql" || dialect === "sqlite") {
       alerts = await queryInterface.sequelize.query(
         "SELECT id, dataset_id FROM Alert",
         { type: queryInterface.sequelize.QueryTypes.SELECT }
@@ -48,7 +48,7 @@ module.exports.up = async (queryInterface) => {
     const cdc = cdcs.find((cdc) => cdc.dataset_id === alert.dataset_id);
 
     if (cdc) {
-      if (dialect === "mysql") {
+      if (dialect === "mysql" || dialect === "sqlite") {
         updatePromises.push(
           queryInterface.sequelize.query(
             `UPDATE Alert SET cdc_id = '${cdc.id}' WHERE id = '${alert.id}'`

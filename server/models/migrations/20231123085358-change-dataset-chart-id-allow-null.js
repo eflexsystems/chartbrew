@@ -5,7 +5,7 @@ module.exports = {
     const dialect = queryInterface.sequelize.getDialect();
 
     let charts;
-    if (dialect === "mysql") {
+    if (dialect === "mysql" || dialect === "sqlite") {
       charts = await queryInterface.sequelize.query(`
         SELECT id FROM Chart LIMIT 1;
       `, { type: Sequelize.QueryTypes.SELECT });
@@ -20,7 +20,7 @@ module.exports = {
     if (charts.length > 0) {
       tempChartId = charts[0].id;
 
-      if (dialect === "mysql") {
+      if (dialect === "mysql" || dialect === "sqlite") {
         datasetsWithTempChart = await queryInterface.sequelize.query(
           `SELECT id FROM Dataset WHERE chart_id = ${tempChartId};`,
           { type: Sequelize.QueryTypes.SELECT }
@@ -91,7 +91,7 @@ module.exports = {
     }
 
     if (datasetsWithTempChart.length > 0) {
-      if (dialect === "mysql") {
+      if (dialect === "mysql" || dialect === "sqlite") {
         await queryInterface.sequelize.query(`
           UPDATE Dataset
           LEFT JOIN Chart ON Dataset.chart_id = Chart.id
