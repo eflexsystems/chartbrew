@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import PropTypes from "prop-types";
-import { Link as LinkDom, useParams } from "react-router-dom";
+import { Link as LinkDom, useParams, useSearchParams } from "react-router-dom";
 import {
   Button, Input, Spacer, Navbar, Tooltip, Popover, Divider, Modal,
-  Link, Image, CircularProgress, NavbarContent, PopoverTrigger, PopoverContent, ModalContent, ModalHeader, ModalBody, ModalFooter, Chip, NavbarItem, NavbarBrand,
+  Link, Image, CircularProgress, PopoverTrigger, PopoverContent, ModalContent, ModalHeader, ModalBody, ModalFooter, Chip, NavbarBrand,
 } from "@nextui-org/react";
 import { connect, useDispatch, useSelector } from "react-redux";
 import { TwitterPicker } from "react-color";
@@ -18,6 +18,8 @@ import {
   LuRefreshCw, LuShare, LuXCircle,
 } from "react-icons/lu";
 import { WidthProvider, Responsive } from "react-grid-layout";
+import useDarkMode from "@fisch0920/use-dark-mode";
+import { useLocalStorage } from "react-use";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
@@ -30,7 +32,7 @@ import {
   getPublicDashboard, getProject, updateProject, updateProjectLogo,
 } from "../../slices/project";
 import { selectTeams, updateTeam } from "../../slices/team";
-import { runQueryOnPublic, selectCharts } from "../../slices/chart";
+import { runQueryOnPublic, runQueryWithFilters, selectCharts } from "../../slices/chart";
 import { blue, primary, secondary } from "../../config/colors";
 import Chart from "../Chart/Chart";
 import logo from "../../assets/logo_inverted.png";
@@ -74,11 +76,14 @@ function PublicDashboard(props) {
   const [refreshLoading, setRefreshLoading] = useState(false);
   const [layouts, setLayouts] = useState(null);
   const [logoAspectRatio, setLogoAspectRatio] = useState(1);
+  const [isOsTheme, setIsOsTheme] = useLocalStorage("osTheme", "false"); // eslint-disable-line
 
   const teams = useSelector(selectTeams);
   const charts = useSelector(selectCharts);
 
+  const [searchParams] = useSearchParams();
   const isDark = useThemeDetector();
+  const darkMode = useDarkMode(false);
   const params = useParams();
   const dispatch = useDispatch();
   const initLayoutRef = useRef(null);
@@ -103,6 +108,12 @@ function PublicDashboard(props) {
   useEffect(() => {
     setLoading(true);
     _fetchProject(window.localStorage.getItem("reportPassword"));
+
+    if (searchParams.get("theme") && searchParams.get("theme") !== "os") {
+      _setTheme(searchParams.get("theme"));
+    } else {
+      _setOSTheme();
+    }
   }, []);
 
   useEffect(() => {
@@ -157,6 +168,12 @@ function PublicDashboard(props) {
     }
   }, [charts]);
 
+  useEffect(() => {
+    if (project?.id) {
+      _checkSearchParamsForFilters();
+    }
+  }, [project]);
+
   const _fetchProject = (password) => {
     if (password) window.localStorage.setItem("reportPassword", password);
 
@@ -192,12 +209,60 @@ function PublicDashboard(props) {
               if (authenticatedProject.password) {
                 setProject({ ...data.payload, password: authenticatedProject.password });
               }
-
               setEditorVisible(true);
             })
             .catch(() => {});
           }
       });
+  };
+
+  const _checkSearchParamsForFilters = () => {
+    charts.forEach((chart) => {
+      // check if there are any filters in the search params
+      // if so, add them to the conditions
+      const params = [];
+      searchParams.entries().forEach((entry) => {
+        const [key, value] = entry;
+        params.push({ variable: key, value });
+      });
+
+      if (params.length === 0) return;
+
+      let identifiedConditions = [];
+      chart.ChartDatasetConfigs.forEach((cdc) => {
+        if (Array.isArray(cdc.Dataset?.conditions)) {
+          identifiedConditions = [...identifiedConditions, ...cdc.Dataset.conditions];
+        }
+      });
+
+      // now check if any filters have the same variable name
+      let newConditions = [];
+      newConditions = identifiedConditions.map((c) => {
+        const newCondition = { ...c };
+        const param = params.find((p) => p.variable === c.variable);
+        if (param) {
+          newCondition.value = param.value;
+        }
+        return newCondition;
+      });
+
+      // remove conditions that don't have a value
+      newConditions = newConditions.filter((c) => c.value);
+
+      if (newConditions.length === 0) return;
+
+      dispatch(runQueryWithFilters({ project_id: chart.project_id, chart_id: chart.id, filters: newConditions }))
+        // .then((data) => {
+        //   if (data.payload) {
+        //     setChart(data.payload);
+        //   }
+
+        //   setDataLoading(false);
+        // })
+        // .catch(() => {
+        //   setDataLoading(false);
+        // });
+    });
   };
 
   const _isOnReport = () => {
@@ -311,6 +376,29 @@ function PublicDashboard(props) {
   const _onLoadLogo = ({ target: img }) => {
     const aspectRatio = img.naturalWidth / img.naturalHeight;
     setLogoAspectRatio(aspectRatio);
+  };
+
+  const _setOSTheme = () => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      darkMode.enable();
+    } else {
+      darkMode.disable();
+    }
+
+    window.localStorage.removeItem("darkMode");
+    setIsOsTheme(true);
+  };
+
+  const _setTheme = (mode) => {
+    setIsOsTheme(false);
+    if (mode === "dark") {
+      darkMode.enable();
+    } else {
+      darkMode.enable();
+      setTimeout(() => {
+        darkMode.disable();
+      }, 100);
+    }
   };
 
   if (loading && !project?.id && !noCharts) {
@@ -588,7 +676,7 @@ function PublicDashboard(props) {
           isBordered
           maxWidth={"full"}
           isBlurred={false}
-          className={"flex-grow-0 justify-between"}
+          className={"header flex-grow-0 justify-between"}
           style={{ backgroundColor: newChanges.backgroundColor || project.backgroundColor || "#FFFFFF" }}
         >
           <NavbarBrand>
@@ -650,47 +738,48 @@ function PublicDashboard(props) {
               </div>
             </div>
           </NavbarBrand>
-          <NavbarContent justify="end">
-            {!isSaved && !preview && (
-              <div className="hidden sm:block">
-                <Button
-                  color="success"
-                  endContent={<LuCheckCircle />}
-                  isLoading={saveLoading}
-                  onClick={_onSaveChanges}
-                >
-                  Save changes
-                </Button>
-              </div>
-            )}
-            {preview && (
-              <NavbarItem>
-                <Button
-                  onClick={() => setPreview(false)}
-                  endContent={<LuXCircle />}
-                  color="primary"
-                  variant="faded"
-                >
-                  Exit preview
-                </Button>
-              </NavbarItem>
-            )}
-
-            {project?.Team?.allowReportRefresh && (
-              <NavbarItem className="hidden sm:block">
-                <Button
-                  onClick={() => _onRefreshCharts()}
-                  endContent={<LuRefreshCw />}
-                  isLoading={refreshLoading}
-                  size="sm"
-                  color="primary"
-                >
-                  Refresh charts
-                </Button>
-              </NavbarItem>
-            )}
-          </NavbarContent>
         </Navbar>
+
+        <div className="absolute top-4 right-4 z-50">
+          {!isSaved && !preview && (
+            <div className="hidden sm:block">
+              <Button
+                color="success"
+                endContent={<LuCheckCircle />}
+                isLoading={saveLoading}
+                onClick={_onSaveChanges}
+              >
+                Save changes
+              </Button>
+            </div>
+          )}
+          {preview && (
+            <div>
+              <Button
+                onClick={() => setPreview(false)}
+                endContent={<LuXCircle />}
+                color="primary"
+                variant="faded"
+              >
+                Exit preview
+              </Button>
+            </div>
+          )}
+
+          {project?.Team?.allowReportRefresh && (
+            <div className="hidden sm:block">
+              <Button
+                onClick={() => _onRefreshCharts()}
+                endContent={<LuRefreshCw />}
+                isLoading={refreshLoading}
+                size="sm"
+                color="primary"
+              >
+                Refresh charts
+              </Button>
+            </div>
+          )}
+        </div>
 
         {charts && charts.length > 0 && _isOnReport() && (
           <div className="main-container relative p-2 pt-4 pb-10 md:pt-4 md:pb-10 md:pl-4 md:pr-4">

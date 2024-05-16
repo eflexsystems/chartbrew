@@ -6,18 +6,17 @@ import {
   Card, Spacer, Tooltip, Dropdown, Button, Modal, Input, Link as LinkNext,
   Textarea, Switch, Popover, Chip, CardHeader, CircularProgress, PopoverTrigger,
   PopoverContent, DropdownMenu, DropdownTrigger, DropdownItem, ModalHeader,
-  ModalBody, ModalFooter, CardBody, ModalContent, Select, SelectItem,
+  ModalBody, ModalFooter, CardBody, ModalContent, Select, SelectItem, RadioGroup, Radio,
+  Badge,
 } from "@nextui-org/react";
 import {
   LuCalendarClock, LuCheck, LuChevronDown, LuClipboard, LuClipboardCheck, LuFileDown,
   LuLayoutDashboard, LuLink, LuListFilter, LuLock, LuMoreHorizontal, LuMoreVertical,
-  LuPlus, LuRefreshCw, LuSettings, LuShare, LuTrash, LuTv2, LuUnlock, LuX, LuXCircle
+  LuPlus, LuRefreshCw, LuSettings, LuShare, LuTrash, LuTv2, LuUnlock, LuX,
 } from "react-icons/lu";
 
 import moment from "moment";
 import _ from "lodash";
-import { enGB } from "date-fns/locale";
-import { format } from "date-fns";
 import { motion } from "framer-motion";
 
 import {
@@ -38,6 +37,7 @@ import useInterval from "../../modules/useInterval";
 import Row from "../../components/Row";
 import Text from "../../components/Text";
 import KpiMode from "./components/KpiMode";
+import useChartSize from "../../modules/useChartSize";
 
 const getFiltersFromStorage = (projectId) => {
   try {
@@ -82,6 +82,9 @@ function Chart(props) {
   const [customUpdateFreq, setCustomUpdateFreq] = useState("");
   const [autoUpdateError, setAutoUpdateError] = useState("");
   const [exportLoading, setExportLoading] = useState(false);
+  const [embedTheme, setEmbedTheme] = useState("");
+  
+  const chartSize = useChartSize(chart.layout);
 
   useInterval(() => {
     dispatch(getChart({
@@ -408,13 +411,13 @@ function Chart(props) {
   const _getEmbedUrl = () => {
     if (!chart.Chartshares || !chart.Chartshares[0]) return "";
     const shareString = chart.Chartshares && chart.Chartshares[0].shareString;
-    return `${SITE_HOST}/chart/${shareString}/embedded`;
+    return `${SITE_HOST}/chart/${shareString}/embedded${embedTheme ? `?theme=${embedTheme}` : ""}`;
   };
 
   const _getEmbedString = () => {
     if (!chart.Chartshares || !chart.Chartshares[0]) return "";
     const shareString = chart.Chartshares && chart.Chartshares[0].shareString;
-    return `<iframe src="${SITE_HOST}/chart/${shareString}/embedded" allowTransparency="true" width="700" height="300" scrolling="no" frameborder="0" style="background-color: #ffffff"></iframe>`;
+    return `<iframe src="${SITE_HOST}/chart/${shareString}/embedded${embedTheme ? `?theme=${embedTheme}` : ""}" allowTransparency="true" width="700" height="300" scrolling="no" frameborder="0" style="background-color: #ffffff"></iframe>`;
   };
 
   const _onCreateSharingString = async () => {
@@ -439,7 +442,7 @@ function Chart(props) {
       {chart && (
         <Card
           shadow="none"
-          className={`h-full bg-content1 border-solid border-1 border-content3 ${print && "min-h-[350px] shadow-none border-solid border-1 border-content4"}`}
+          className={`h-full bg-content1 border-solid border-1 border-divider ${print && "min-h-[350px] shadow-none border-solid border-1 border-content4"}`}
         >
           <CardHeader className="pb-0 grid grid-cols-12 items-start">
             <div className="col-span-6 sm:col-span-8 flex items-start justify-start">
@@ -458,24 +461,6 @@ function Chart(props) {
                       <Text b>{chart.name}</Text>
                     )}
                   </>
-                  {chart.ChartDatasetConfigs && conditions.map((c) => (
-                    <Chip
-                      color="primary"
-                      variant={"flat"}
-                      key={c.id}
-                      size="sm"
-                      endContent={(
-                        <LinkNext onClick={() => _onClearFilter(c)} className="text-default-500 flex items-center">
-                          <LuXCircle size={14} />
-                        </LinkNext>
-                      )}
-                    >
-                      <Text size="sm">
-                        {c.type !== "date" && `${c.value}`}
-                        {c.type === "date" && format(new Date(c.value), "Pp", { locale: enGB })}
-                      </Text>
-                    </Chip>
-                  ))}
                 </Row>
                 {chart.chartData && (
                   <Row justify="flex-start" align="center" className={"gap-1"}>
@@ -518,21 +503,41 @@ function Chart(props) {
             </div>
             <div className="col-span-6 sm:col-span-4 flex items-start justify-end">
               {_checkIfFilters() && (
-                <Popover>
-                  <PopoverTrigger>
-                    <LinkNext className="text-gray-500">
-                      <LuListFilter />
-                    </LinkNext>
-                  </PopoverTrigger>
-                  <PopoverContent>
+                <div className="flex items-start gap-1">
+                  {chartSize?.[2] > 3 && (
                     <ChartFilters
                       chart={chart}
                       onAddFilter={_onAddFilter}
                       onClearFilter={_onClearFilter}
                       conditions={conditions}
+                      inline
+                      size="sm"
+                      amount={1}
                     />
-                  </PopoverContent>
-                </Popover>
+                  )}
+                  <Popover>
+                    <PopoverTrigger>
+                      <LinkNext className="text-gray-500">
+                        <Badge
+                          color="primary"
+                          content={conditions.length}
+                          size="sm"
+                          isInvisible={!conditions || conditions.length === 0}
+                        >
+                          <LuListFilter />
+                        </Badge>
+                      </LinkNext>
+                    </PopoverTrigger>
+                    <PopoverContent className="pt-3">
+                      <ChartFilters
+                        chart={chart}
+                        onAddFilter={_onAddFilter}
+                        onClearFilter={_onClearFilter}
+                        conditions={conditions}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
               )}
               {projectId && !print && (
                 <Dropdown>
@@ -933,6 +938,7 @@ function Chart(props) {
                   onChange={_onToggleShareable}
                   isSelected={chart.shareable}
                   disabled={!_canAccess("projectAdmin")}
+                  size="sm"
                 />
                 <Spacer x={0.5} />
                 <Text>
@@ -994,6 +1000,24 @@ function Chart(props) {
               && (chart.Chartshares && chart.Chartshares.length > 0)
               && (
                 <>
+                  <div className="flex items-center">
+                    <RadioGroup
+                      label="Select a theme"
+                      orientation="horizontal"
+                      size="sm"
+                    >
+                      <Radio value="os" onClick={() => setEmbedTheme("")} checked={embedTheme === ""}>
+                        System default
+                      </Radio>
+                      <Radio value="dark" onClick={() => setEmbedTheme("dark")} checked={embedTheme === "dark"}>
+                        Dark
+                      </Radio>
+                      <Radio value="light" onClick={() => setEmbedTheme("light")} checked={embedTheme === "light"}>
+                        Light
+                      </Radio>
+                    </RadioGroup>
+                  </div>
+                  <Spacer y={1} />
                   <Row>
                     <Textarea
                       label={"Copy the following code on the website you wish to add your chart in."}
