@@ -1,0 +1,174 @@
+The UI is rebuilding. Please wait...
+
+> client-new@v3.5.0 build
+> npm run prepareSettings && vite build
+
+
+> client-new@v3.5.0 prepareSettings
+> echo n | cp -vipr src/config/settings.template.js src/config/settings.js | true
+
+overwrite src/config/settings.js? (y/n [n]) not overwritten
+vite v5.2.11 building for production...
+transforming...
+✓ 3558 modules transformed.
+rendering chunks...
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /Users/jacob/dev/eflexsystems/chartbrew/client/src/components/FeedbackForm.jsx is dynamically imported by /Users/jacob/dev/eflexsystems/chartbrew/client/src/containers/Main.jsx but also statically imported by /Users/jacob/dev/eflexsystems/chartbrew/client/src/components/Navbar.jsx, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/index.html                                            2.40 kB │ gzip:   0.93 kB
+dist/assets/stripe-connection-yXJziJsM.webp                4.18 kB
+dist/assets/simpleAnalytics-dark-BCIJrTJo.png              4.26 kB
+dist/assets/Strapi-dark-Dzkp-IiD.png                       4.53 kB
+dist/assets/ChartMogul-dark-DE3-3nIO.png                   4.59 kB
+dist/assets/mongodb-dark-D0bSEiv_.png                      5.72 kB
+dist/assets/mongodb-logo-DrQYhwJw.png                      6.04 kB
+dist/assets/rds-dark-DWSOFFfD.png                          6.56 kB
+dist/assets/rds-yl-UwjNX.png                               6.66 kB
+dist/assets/moomken-CS-Di9A1.png                           6.85 kB
+dist/assets/Stripe-dark-BCKKsGwK.png                       7.32 kB
+dist/assets/api-dark-DyAvk25C.png                          7.49 kB
+dist/assets/api-CLkmwGLL.png                               7.62 kB
+dist/assets/mysql-dark-4uT7M0IM.png                        9.26 kB
+dist/assets/logo_blue-Dz3VTKI9.png                        10.65 kB
+dist/assets/realtime-db-url-Cu-nb9v5.webp                 10.81 kB
+dist/assets/mysql-DID6HRFU.png                            10.84 kB
+dist/assets/customerio-B30Z29FD.png                       11.66 kB
+dist/assets/customerio-dark-CeF6WypK.png                  12.34 kB
+dist/assets/GoogleAnalytics-OzboGHsj.webp                 13.72 kB
+dist/assets/googleanalytics-dark-C4yssbSw.png             13.74 kB
+dist/assets/ChartMogul-BL231djX.webp                      13.94 kB
+dist/assets/postgres-dark-DmHOiTg_.png                    14.16 kB
+dist/assets/firebase-real-time-database-kTvdusB4.png      15.28 kB
+dist/assets/postgres-CtKK-suo.png                         16.54 kB
+dist/assets/Supabase-dark-DGQ-MODG.png                    17.37 kB
+dist/assets/plausible-logo-Cj_jDbeW.png                   18.51 kB
+dist/assets/firebase-firestore-DESAKj6i.png               18.79 kB
+dist/assets/mailgun-dark-C3VyB6uM.png                     21.38 kB
+dist/assets/firebase-dark-iqS0zI2A.png                    23.13 kB
+dist/assets/mailgun_logo-za3eyQmY.webp                    24.82 kB
+dist/assets/circular_city-LQuqa7Mn.webp                   25.46 kB
+dist/assets/firestore-dark-CgOsJFlH.png                   26.70 kB
+dist/assets/plausible-dark-DaEPs6Wr.png                   28.69 kB
+dist/assets/logo_full_dark-BIe_PSSc.png                   36.12 kB
+dist/assets/logo_full_light-52epSV37.png                  40.39 kB
+dist/assets/timescaledb-DcYQRyxL.jpg                     117.73 kB
+dist/assets/chartbrew-auto-update-CRU_TaQK.jpg           121.52 kB
+dist/assets/timescaledb-dark-CeKyZGqN.jpeg               125.07 kB
+dist/assets/dashboards_background-D63jsRdY.webp          139.67 kB
+dist/assets/chartmogul-template-f5IMPgYs.jpeg            238.74 kB
+dist/assets/plausible-template-BlCuXQSj.jpeg             239.51 kB
+dist/assets/mailgun-template-DuKp3i41.jpeg               275.44 kB
+dist/assets/simpleanalytics-template-UmKAUg5f.jpeg       294.50 kB
+dist/assets/ga-template-DDSXtU8E.jpeg                    316.95 kB
+dist/assets/quick-start-video-COdToArA.jpg               353.79 kB
+dist/assets/instruction-dashboard-report-CzHDNAQR.png  1,332.42 kB
+dist/assets/ProjectBoard-ZOuK-rSF.css                      5.46 kB │ gzip:   1.02 kB
+dist/assets/index-CdvOOxJi.css                           255.50 kB │ gzip:  31.07 kB
+dist/assets/validations-BQ7ZzrKH.js                        0.30 kB │ gzip:   0.25 kB
+dist/assets/ProjectRedirect-BYSKuLSJ.js                    0.60 kB │ gzip:   0.37 kB
+dist/assets/UserInvite-eaieJm4U.js                         1.26 kB │ gzip:   0.69 kB
+dist/assets/GoogleAuth-VSGNTllc.js                         1.77 kB │ gzip:   0.91 kB
+dist/assets/PasswordReset-CqsPxWsi.js                      2.31 kB │ gzip:   1.13 kB
+dist/assets/ManageTeam-NHTqegQ_.js                         2.43 kB │ gzip:   1.07 kB
+dist/assets/EmbeddedChart-CpHb9WGE.js                      5.18 kB │ gzip:   2.08 kB
+dist/assets/Login-C1vLSPVX.js                              5.86 kB │ gzip:   2.18 kB
+dist/assets/Signup-CMS3LLbU.js                             7.92 kB │ gzip:   2.72 kB
+dist/assets/ManageUser-Cqmg-0Mi.js                         9.35 kB │ gzip:   3.19 kB
+dist/assets/PublicDashboard-C980RGqr.js                   41.54 kB │ gzip:  13.63 kB
+dist/assets/ProjectBoard-CIiCVJZC.js                     175.78 kB │ gzip:  53.52 kB
+dist/assets/index-cP6iRGjt.js                          3,282.37 kB │ gzip: 942.33 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.55s
+UI built successfully!
+The UI is rebuilding. Please wait...
+
+> client-new@v3.5.0 build
+> npm run prepareSettings && vite build
+
+
+> client-new@v3.5.0 prepareSettings
+> echo n | cp -vipr src/config/settings.template.js src/config/settings.js | true
+
+overwrite src/config/settings.js? (y/n [n]) not overwritten
+vite v5.2.11 building for production...
+transforming...
+✓ 3558 modules transformed.
+rendering chunks...
+[plugin:vite:reporter] [plugin vite:reporter] 
+(!) /Users/jacob/dev/eflexsystems/chartbrew/client/src/components/FeedbackForm.jsx is dynamically imported by /Users/jacob/dev/eflexsystems/chartbrew/client/src/containers/Main.jsx but also statically imported by /Users/jacob/dev/eflexsystems/chartbrew/client/src/components/Navbar.jsx, dynamic import will not move module into another chunk.
+
+computing gzip size...
+dist/index.html                                            2.40 kB │ gzip:   0.93 kB
+dist/assets/stripe-connection-yXJziJsM.webp                4.18 kB
+dist/assets/simpleAnalytics-dark-BCIJrTJo.png              4.26 kB
+dist/assets/Strapi-dark-Dzkp-IiD.png                       4.53 kB
+dist/assets/ChartMogul-dark-DE3-3nIO.png                   4.59 kB
+dist/assets/mongodb-dark-D0bSEiv_.png                      5.72 kB
+dist/assets/mongodb-logo-DrQYhwJw.png                      6.04 kB
+dist/assets/rds-dark-DWSOFFfD.png                          6.56 kB
+dist/assets/rds-yl-UwjNX.png                               6.66 kB
+dist/assets/moomken-CS-Di9A1.png                           6.85 kB
+dist/assets/Stripe-dark-BCKKsGwK.png                       7.32 kB
+dist/assets/api-dark-DyAvk25C.png                          7.49 kB
+dist/assets/api-CLkmwGLL.png                               7.62 kB
+dist/assets/mysql-dark-4uT7M0IM.png                        9.26 kB
+dist/assets/logo_blue-Dz3VTKI9.png                        10.65 kB
+dist/assets/realtime-db-url-Cu-nb9v5.webp                 10.81 kB
+dist/assets/mysql-DID6HRFU.png                            10.84 kB
+dist/assets/customerio-B30Z29FD.png                       11.66 kB
+dist/assets/customerio-dark-CeF6WypK.png                  12.34 kB
+dist/assets/GoogleAnalytics-OzboGHsj.webp                 13.72 kB
+dist/assets/googleanalytics-dark-C4yssbSw.png             13.74 kB
+dist/assets/ChartMogul-BL231djX.webp                      13.94 kB
+dist/assets/postgres-dark-DmHOiTg_.png                    14.16 kB
+dist/assets/firebase-real-time-database-kTvdusB4.png      15.28 kB
+dist/assets/postgres-CtKK-suo.png                         16.54 kB
+dist/assets/Supabase-dark-DGQ-MODG.png                    17.37 kB
+dist/assets/plausible-logo-Cj_jDbeW.png                   18.51 kB
+dist/assets/firebase-firestore-DESAKj6i.png               18.79 kB
+dist/assets/mailgun-dark-C3VyB6uM.png                     21.38 kB
+dist/assets/firebase-dark-iqS0zI2A.png                    23.13 kB
+dist/assets/mailgun_logo-za3eyQmY.webp                    24.82 kB
+dist/assets/circular_city-LQuqa7Mn.webp                   25.46 kB
+dist/assets/firestore-dark-CgOsJFlH.png                   26.70 kB
+dist/assets/plausible-dark-DaEPs6Wr.png                   28.69 kB
+dist/assets/logo_full_dark-BIe_PSSc.png                   36.12 kB
+dist/assets/logo_full_light-52epSV37.png                  40.39 kB
+dist/assets/timescaledb-DcYQRyxL.jpg                     117.73 kB
+dist/assets/chartbrew-auto-update-CRU_TaQK.jpg           121.52 kB
+dist/assets/timescaledb-dark-CeKyZGqN.jpeg               125.07 kB
+dist/assets/dashboards_background-D63jsRdY.webp          139.67 kB
+dist/assets/chartmogul-template-f5IMPgYs.jpeg            238.74 kB
+dist/assets/plausible-template-BlCuXQSj.jpeg             239.51 kB
+dist/assets/mailgun-template-DuKp3i41.jpeg               275.44 kB
+dist/assets/simpleanalytics-template-UmKAUg5f.jpeg       294.50 kB
+dist/assets/ga-template-DDSXtU8E.jpeg                    316.95 kB
+dist/assets/quick-start-video-COdToArA.jpg               353.79 kB
+dist/assets/instruction-dashboard-report-CzHDNAQR.png  1,332.42 kB
+dist/assets/ProjectBoard-ZOuK-rSF.css                      5.46 kB │ gzip:   1.02 kB
+dist/assets/index-CdvOOxJi.css                           255.50 kB │ gzip:  31.07 kB
+dist/assets/validations-BQ7ZzrKH.js                        0.30 kB │ gzip:   0.25 kB
+dist/assets/ProjectRedirect-BYSKuLSJ.js                    0.60 kB │ gzip:   0.37 kB
+dist/assets/UserInvite-eaieJm4U.js                         1.26 kB │ gzip:   0.69 kB
+dist/assets/GoogleAuth-VSGNTllc.js                         1.77 kB │ gzip:   0.91 kB
+dist/assets/PasswordReset-CqsPxWsi.js                      2.31 kB │ gzip:   1.13 kB
+dist/assets/ManageTeam-NHTqegQ_.js                         2.43 kB │ gzip:   1.07 kB
+dist/assets/EmbeddedChart-CpHb9WGE.js                      5.18 kB │ gzip:   2.08 kB
+dist/assets/Login-C1vLSPVX.js                              5.86 kB │ gzip:   2.18 kB
+dist/assets/Signup-CMS3LLbU.js                             7.92 kB │ gzip:   2.72 kB
+dist/assets/ManageUser-Cqmg-0Mi.js                         9.35 kB │ gzip:   3.19 kB
+dist/assets/PublicDashboard-C980RGqr.js                   41.54 kB │ gzip:  13.63 kB
+dist/assets/ProjectBoard-CIiCVJZC.js                     175.78 kB │ gzip:  53.52 kB
+dist/assets/index-cP6iRGjt.js                          3,282.37 kB │ gzip: 942.33 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 7.79s
+UI built successfully!
