@@ -7,7 +7,7 @@ export const SITE_HOST = import.meta.env.PROD
   : (import.meta.env.VITE_APP_CLIENT_HOST_DEV || "http://localhost:4018");
 
 export const BASENAME = import.meta.env.PROD
-  ? import.meta.env.VITE_APP_BASENAME
+  ? (import.meta.env.VITE_APP_BASENAME || "")
   : "";
 
 export const DOCUMENTATION_HOST = import.meta.env.PROD ? "https://docs.chartbrew.com" : "http://localhost:8080";

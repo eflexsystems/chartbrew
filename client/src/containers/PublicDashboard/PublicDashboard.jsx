@@ -44,6 +44,7 @@ import Text from "../../components/Text";
 import Row from "../../components/Row";
 import Container from "../../components/Container";
 import useThemeDetector from "../../modules/useThemeDetector";
+import { setPathname } from "../../modules/pathHelpers";
 
 const ResponsiveGridLayout = WidthProvider(Responsive, { measureBeforeMount: true });
 
@@ -188,7 +189,7 @@ function PublicDashboard(props) {
             setPasswordRequired(true);
           } else if (data.error.message === 401) {
             setNotAuthorized(true);
-            window.location.pathname = "/login";
+            setPathname("/login");
           } else {
             setNoCharts(true);
           }

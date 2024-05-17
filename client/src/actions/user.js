@@ -3,6 +3,7 @@ import moment from "moment";
 
 import { API_HOST } from "../config/settings";
 import { addError } from "./error";
+import { getPathname, setPathname } from "../modules/pathHelpers";
 
 export const SAVE_USER = "SAVE_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
@@ -16,29 +17,31 @@ export const REMOVE_PENDING_INVITE = "REMOVE_PENDING_INVITE";
 const expires = moment().add(1, "month").toDate();
 
 function authenticatePage() {
-  if (window.location.pathname === "/login") {
+  const pathname = getPathname();
+  if (pathname === "/login") {
     return false;
-  } else if (window.location.pathname === "/signup") {
+  } else if (pathname === "/signup") {
     return false;
-  } else if (window.location.pathname.indexOf("/b/") > -1) {
+  } else if (pathname.indexOf("/b/") > -1) {
     return false;
-  } else if (window.location.pathname === "/passwordReset") {
+  } else if (pathname === "/passwordReset") {
     return false;
-  } else if (window.location.pathname === "/invite") {
+  } else if (pathname === "/invite") {
     return false;
-  } else if (window.location.pathname === "/feedback") {
+  } else if (pathname === "/feedback") {
     return false;
-  } else if (window.location.pathname.indexOf("embedded") > -1) {
+  } else if (pathname.indexOf("embedded") > -1) {
     return false;
   }
 
-  window.location.pathname = "/login";
+  setPathname("/login");
   return true;
 }
 
 function redirectToDashboard() {
-  if (window.location.pathname === "/login" || window.location.pathname === "signup") {
-    window.location.pathname = "/user";
+  const pathname = getPathname();
+  if (pathname === "/login" || pathname === "signup") {
+    setPathname("/user");
     return true;
   }
 
@@ -295,7 +298,7 @@ export function relog() {
   return (dispatch) => {
     if (!token) {
       if (authenticatePage()) {
-        window.location.pathname = "/login";
+        setPathname("/login");
       }
       return new Promise((resolve, reject) => reject("Token is missing"));
     }
@@ -323,7 +326,7 @@ export function relog() {
       })
       .catch(() => {
         if (authenticatePage()) {
-          window.location.pathname = "/login";
+          setPathname("/login");
         }
         return new Promise((resolve, reject) => reject("Can't authenticate the user"));
       });
@@ -363,7 +366,7 @@ export function getPendingInvites(id) {
 export function logout() {
   return (dispatch) => {
     cookie.remove("brewToken", { path: "/" });
-    window.location.pathname = "/";
+    setPathname("/");
     dispatch({ type: LOGOUT_USER });
   };
 }

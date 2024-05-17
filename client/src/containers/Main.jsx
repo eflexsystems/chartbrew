@@ -14,6 +14,7 @@ import {
 import { getTeams, selectTeam } from "../slices/team";
 import { cleanErrors as cleanErrorsAction } from "../actions/error";
 import useThemeDetector from "../modules/useThemeDetector";
+import { setPathname, getPathname } from "../modules/pathHelpers";
 import { IconContext } from "react-icons";
 import TeamMembers from "./TeamMembers/TeamMembers";
 import TeamSettings from "./TeamSettings";
@@ -42,23 +43,24 @@ const GoogleAuth = lazy(() => import("./GoogleAuth"));
 const ProjectRedirect = lazy(() => import("./ProjectRedirect"));
 
 function authenticatePage() {
-  if (window.location.pathname === "/login") {
+  const pathname = getPathname();
+  if (pathname === "/login") {
     return false;
-  } else if (window.location.pathname === "/signup") {
+  } else if (pathname === "/signup") {
     return false;
-  } else if (window.location.pathname.indexOf("/b/") > -1) {
+  } else if (pathname.indexOf("/b/") > -1) {
     return false;
-  } else if (window.location.pathname === "/passwordReset") {
+  } else if (pathname === "/passwordReset") {
     return false;
-  } else if (window.location.pathname === "/invite") {
+  } else if (pathname === "/invite") {
     return false;
-  } else if (window.location.pathname === "/feedback") {
+  } else if (pathname === "/feedback") {
     return false;
-  } else if (window.location.pathname.indexOf("embedded") > -1) {
+  } else if (pathname.indexOf("embedded") > -1) {
     return false;
   }
 
-  window.location.pathname = "/login";
+  setPathname("/login");
   return true;
 }
 
@@ -86,7 +88,7 @@ function Main(props) {
           }
 
           if (authenticatePage()) {
-            window.location.pathname = "/login";
+            setPathname("/login");
           }
 
           return null;
