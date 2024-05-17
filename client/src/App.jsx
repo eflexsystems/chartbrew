@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { NextUIProvider } from "@nextui-org/react";
-import { BASENAME } from "../config/settings";
+import { BASENAME } from "./config/settings";
 
 import Main from "./containers/Main";
 import reducer from "./reducers";
