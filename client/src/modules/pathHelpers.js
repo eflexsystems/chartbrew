@@ -1,4 +1,4 @@
-import { BASENAME } from "./config/settings";
+import { BASENAME } from "../config/settings";
 
 export const getPathname = () => {
   return window.location.pathname.replace(BASENAME.slice(0, -1), "");
